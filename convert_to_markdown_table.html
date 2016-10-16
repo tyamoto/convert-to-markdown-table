@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<style type="text/css">
+body {
+  margin: 0;
+}
+textarea {
+  width: 99%;
+  height: 400px;
+  margin: 3px;
+  padding: 3px;
+  border: solid 2px;
+  resize: vertical;
+}
+</style>
+</head>
+<body>
+<textarea id="from" placeholder="tsvまたはcsvフォーマットで入力してください。tabキーで変換します。"></textarea>
+<textarea id="to"   placeholder="結果"></textarea>
+<script src="https://s.yimg.jp/images/commerce/js/libs/jquery/core/1.11.1/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(function() {
+  $('textarea#from').focus();
+  $('textarea#to').focus(function() {
+    var from      = $('textarea#from').val(),
+        delimiter = from.indexOf(',') === -1 ? '\t' : ',',
+        converted = '',
+        to_table  = function(v) {return '|'+v.join('|')+'|\n';};
+    $.each(from.split(/\r\n|\r|\n/), function(i, line) {
+      if (line == '') return true;
+      var items = line.split(delimiter);
+      converted += to_table(items);
+      if (i == 0) {
+        converted += to_table(
+          Array.apply(null, Array(items.length)).map(function () {return ':----';})
+        );
+      }
+    });
+    $(this).text(converted);
+  });
+});
+</script>
+</body>
+</html>
+<!--
+vim: et sw=2 ts=2 st=2
+ -->
